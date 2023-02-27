@@ -16,11 +16,12 @@ pipeline {
         
         stage('SonarQube analysis') {
             steps {
-                withSonarQubeEnv('Sonar') {
-                sh 'mvn sonar:sonar'
+                withSonarQubeEnv('SonarQube server name') {
+                sh 'sonar-scanner'
                 }
             }
         }
+
         
         stage('SonarQube quality gate') {
             steps {
