@@ -15,21 +15,22 @@ pipeline {
         }
         
         stage('SonarQube analysis') {
-            steps {
-                withSonarQubeEnv('Sonar') {
-                sh 'sonar-scanner'
+              steps {
+                withSonarQubeEnv('SonarQubeServer') {
+                  sh 'mvn clean install sonar:sonar'
                 }
+              }
             }
-        }
-
-        
-        stage('SonarQube quality gate') {
-            steps {
+        stage('SonarQube gate check') {
+              steps {
                 timeout(time: 1, unit: 'HOURS') {
-                waitForQualityGate abortPipeline: true
+                  def qualitygate = waitForQualityGate()
+                  if (qualitygate.status != 'OK') {
+                    error "Pipeline aborted due to quality gate failure: ${qualitygate.status}"
+                  }
                 }
+              }
             }
-        }
         
         stage('Install') {
             steps {
