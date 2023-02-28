@@ -2,7 +2,7 @@
 FROM node:18-alpine AS base
 
 # Set the working directory in the container to /app
-WORKDIR /nextjs-docker
+WORKDIR /my-appp
 
 # Copy the package.json and package-lock.json files to the container
 COPY package*.json ./

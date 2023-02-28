@@ -1,0 +1,79 @@
+pipeline {
+    agent any
+    environment {
+        ECR_REGISTRY = '602997897775.dkr.ecr.eu-central-1.amazonaws.com'
+        IMAGE_NAME = 'nextjs'
+        IMAGE_TAG = "${BUILD_NUMBER}"
+        DOCKER_IMAGE = "${ECR_REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG}"
+    }
+
+    stages {
+        stage('Clone repo') {
+            steps {
+                git url: 'https://github.com/NTAP3/NextJS-APP.git'
+            }
+        }
+        
+        stage('SonarQube analysis') {
+            steps {
+                withSonarQubeEnv('Sonar') {
+                sh 'sonar-scanner'
+                }
+            }
+        }
+
+        
+        stage('SonarQube quality gate') {
+            steps {
+                timeout(time: 1, unit: 'HOURS') {
+                waitForQualityGate abortPipeline: true
+                }
+            }
+        }
+        
+        stage('Install') {
+            steps {
+                sh 'npm install'
+            }
+        }
+        
+        
+        stage('Test') {
+            steps {
+                sh 'npm run test'
+            }
+        }
+        
+        stage('Build') {
+            steps {
+                sh 'npm run build'
+            }
+        }
+        
+        stage('Lint') {
+            steps {
+                sh 'npm run lint'
+            }
+        }
+        
+        stage('Create Docker Image') {
+            steps {
+                sh "docker build -t ${IMAGE_NAME}:${IMAGE_TAG} ."
+            }
+        }
+        
+        stage('Push to ECR') {
+            steps {
+                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws']]) {
+                    sh "docker login -u AWS -p \$(aws ecr get-login-password) ${ECR_REGISTRY}"
+                    sh "docker tag ${IMAGE_NAME}:${IMAGE_TAG} ${DOCKER_IMAGE}"
+                    sh "docker push ${DOCKER_IMAGE}"
+                    script{
+                        currentBuild.result = 'SUCCESS'
+                        currentBuild.description = "${DOCKER_IMAGE}"
+                    }
+                }
+            }
+        }
+    }
+}
