@@ -20,6 +20,7 @@ pipeline {
                   sh 'sonar-scanner'
                 }
               }
+            }
           
         stage('SonarQube gate check') {
               steps {
