@@ -14,24 +14,19 @@ pipeline {
             }
         }
         
-        stage('SonarQube analysis') {
-             steps {
-                withSonarQubeEnv('Sonar') {
-                  sh 'sonar-scanner'
+        stage('SonarQube Analysis') {
+            steps {
+                def scannerHome = tool 'Sonar-scanner';
+                withSonarQubeEnv() {
+                  sh "${scannerHome}/bin/sonar-scanner"
                 }
               }
             }
           
         stage('SonarQube gate check') {
               steps {
-                timeout(time: 1, unit: 'HOURS') {
-                  def qualitygate = waitForQualityGate()
-                  if (qualitygate.status != 'OK') {
-                    error "Pipeline aborted due to quality gate failure: ${qualitygate.status}"
+                  waitForQualityGate abortPipeline: true
                   }
-                }
-              }
-            }
         
         stage('Install') {
             steps {
