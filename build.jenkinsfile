@@ -14,12 +14,12 @@ pipeline {
             }
         }
         
-        stage('SonarQube Analysis') {
-            def scannerHome = tool 'NextJs';
-            withSonarQubeEnv() {
-              sh "${scannerHome}/bin/sonar-scanner"
-            }
-          }
+        stage('SonarQube analysis') {
+              steps {
+                withSonarQubeEnv('Sonar') {
+                  sh 'sonar-scanner'
+                }
+              }
           
         stage('SonarQube gate check') {
               steps {
