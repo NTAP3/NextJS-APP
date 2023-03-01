@@ -6,7 +6,8 @@ pipeline {
         IMAGE_TAG = "${BUILD_NUMBER}"
         DOCKER_IMAGE = "${ECR_REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG}"
         SONAR_URL = 'http://192.168.8.181:9000/'
-        SONAR_LOGIN = credentials('sonar')
+        SONAR_LOGIN = 'admin'
+        SONAR_PASSWORD = 'Tunex555'
     }
 
     stages {
@@ -22,7 +23,7 @@ pipeline {
                 def scannerHome = tool 'Sonar';
                 withSonarQubeEnv() {
                 }
-                  sh "${scannerHome}/bin/sonar-scanner -Dsonar.host.url=${SONAR_URL} -Dsonar.login=${SONAR_LOGIN}"
+                  sh "${scannerHome}/bin/sonar-scanner -Dsonar.host.url=${SONAR_URL} -Dsonar.login=${SONAR_LOGIN} -Dsonar.password=${SPNAR_PASSWORD}"
                 }
               }
             }
