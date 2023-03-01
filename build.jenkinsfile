@@ -5,6 +5,8 @@ pipeline {
         IMAGE_NAME = 'nextjs'
         IMAGE_TAG = "${BUILD_NUMBER}"
         DOCKER_IMAGE = "${ECR_REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG}"
+        SONAR_URL = 'http://192.168.8.181:9000/'
+        SONAR_LOGIN = credentials('sonar')
     }
 
     stages {
