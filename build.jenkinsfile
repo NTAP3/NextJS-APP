@@ -14,13 +14,13 @@ pipeline {
             }
         }
         
-        stage('SonarQube analysis') {
-              steps {
-                withSonarQubeEnv('SonarQubeServer') {
-                  sh 'mvn clean install sonar:sonar'
-                }
-              }
+        stage('SonarQube Analysis') {
+            def scannerHome = tool 'NextJs';
+            withSonarQubeEnv() {
+              sh "${scannerHome}/bin/sonar-scanner"
             }
+          }
+        }
         stage('SonarQube gate check') {
               steps {
                 timeout(time: 1, unit: 'HOURS') {
