@@ -20,10 +20,17 @@ pipeline {
         }
         
         stage('SonarQube Analysis') {
-            steps {
-                    sh "${scannerHome}/bin/sonar-scanner -X -Dsonar.projectKey=${SONAR_KEY} -Dsonar.sources=. -Dsonar.host.url=${SONAR_URL} -Dsonar.login=${SONAR_LOGIN}"
+            options {
+                timeout(time: 10, unit: 'MINUTES')
+                script {
+                sh 'export PS4=+; set -x'
                 }
+            }
+            steps {
+                sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=${SONAR_KEY} -Dsonar.sources=. -Dsonar.host.url=${SONAR_URL} -Dsonar.login=${SONAR_LOGIN}"
+            }
         }
+
           
         stage('SonarQube gate check') {
               steps {
