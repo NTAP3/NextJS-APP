@@ -20,6 +20,9 @@ pipeline {
         }
         
         stage('SonarQube Analysis') {
+            options{
+                debug()
+            }
             steps {
                     sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=${SONAR_KEY} -Dsonar.sources=. -Dsonar.host.url=${SONAR_URL} -Dsonar.login=${SONAR_LOGIN}"
                 }
