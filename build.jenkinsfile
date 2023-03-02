@@ -5,10 +5,7 @@ pipeline {
         IMAGE_NAME = 'nextjs'
         IMAGE_TAG = "${BUILD_NUMBER}"
         DOCKER_IMAGE = "${ECR_REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG}"
-        SONAR_URL = 'http://192.168.8.181:9000/'
-        SONAR_LOGIN = 'sqp_14b8522e6d2ae4f22e5891b40f2ee4ee122bd773'
-        SONAR_KEY = 'jenkins'
-        scannerHome = 'SonarScanner'
+        scannerHome = tool 'SonarScanner'
     }
 
     stages {
@@ -21,16 +18,16 @@ pipeline {
         
         stage('SonarQube Analysis') {
             steps {
-                sh "/opt/sonar-scanner/bin/sonar-scanner -Dsonar.projectKey=${SONAR_KEY} -Dsonar.sources=. -Dsonar.host.url=${SONAR_URL} -Dsonar.login=${SONAR_LOGIN}"
+                withSonarQubeEnv('SonarQube') {
+                    sh "${scannerHome}/bin/sonar-scanner"
+                }
             }
         }
 
           
         stage('SonarQube quality gate') {
             steps {
-                withSonarQubeEnv('Sonar') {
-                    waitForQualityGate abortPipeline: true
-            }
+                waitForQualityGate abortPipeline: true
           }
         }
             
