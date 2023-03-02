@@ -28,8 +28,11 @@ pipeline {
           
         stage('SonarQube quality gate') {
             steps {
-                waitForQualityGate abortPipeline: true
+                withSonarQubeEnv('Sonar') {
+                    waitForQualityGate abortPipeline: true
             }
+          }
+        }
             
         stage('Install') {
             steps {
