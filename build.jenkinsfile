@@ -20,13 +20,10 @@ pipeline {
         
         stage('SonarQube Analysis') {
             steps {
-                script{
-                    def scannerHome = tool 'Sonar';
-                    withSonarQubeEnv() {
-                    }
-                }
-                  
-                sh "${scannerHome}/bin/sonar-scanner -Dsonar.host.url=${SONAR_URL} -Dsonar.login=${SONAR_LOGIN} -Dsonar.projectKey=${SONAR_KEY}"
+                def scannerHome = tool 'Sonar';
+                withSonarQubeEnv() {
+                }                  
+                sh "${scannerHome}/bin/sonar-scanner"
             }
         }
           
