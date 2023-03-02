@@ -8,7 +8,7 @@ pipeline {
         SONAR_URL = 'http://192.168.8.181:9000/'
         SONAR_LOGIN = 'sqp_14b8522e6d2ae4f22e5891b40f2ee4ee122bd773'
         SONAR_KEY = 'jenkins'
-        scannerHome = 'Sonar'
+        scannerHome = 'SonarScanner'
     }
 
     stages {
