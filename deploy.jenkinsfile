@@ -1,0 +1,27 @@
+pipeline {
+  agent any
+
+  parameters {
+    choice(
+      name: 'DOCKER_IMAGE_TAG',
+      description: 'Choose a Docker image tag:',
+      choices:[],
+    )
+  }
+
+  stages {
+    stage('Deploy') {
+      steps {
+        script {
+          def ecr_registry = "602997897775.dkr.ecr.eu-central-1.amazonaws.com"
+          def image_name = "nextjs"
+          def docker_image = "${ecr_registry}/${image_name}:${params.DOCKER_IMAGE_TAG}"
+
+          sh "docker pull ${docker_image}"
+
+          currentBuild.result = 'SUCCESS'
+        }
+      }
+    }
+  }
+}

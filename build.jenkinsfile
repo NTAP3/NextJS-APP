@@ -5,32 +5,32 @@ pipeline {
         IMAGE_NAME = 'nextjs'
         IMAGE_TAG = "${BUILD_NUMBER}"
         DOCKER_IMAGE = "${ECR_REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG}"
+        scannerHome = tool 'SonarScanner'
     }
 
     stages {
         stage('Clone repo') {
             steps {
+                cleanWs()
                 git url: 'https://github.com/NTAP3/NextJS-APP.git'
             }
         }
         
-        stage('SonarQube analysis') {
+        stage('SonarQube Analysis') {
             steps {
-                withSonarQubeEnv('Sonar') {
-                sh 'sonar-scanner'
+                withSonarQubeEnv('SonarQube') {
+                    sh "${scannerHome}/bin/sonar-scanner"
                 }
             }
         }
 
-        
+          
         stage('SonarQube quality gate') {
             steps {
-                timeout(time: 1, unit: 'HOURS') {
                 waitForQualityGate abortPipeline: true
-                }
-            }
+          }
         }
-        
+            
         stage('Install') {
             steps {
                 sh 'npm install'
@@ -40,7 +40,7 @@ pipeline {
         
         stage('Test') {
             steps {
-                sh 'npm run test'
+                sh 'npm test'
             }
         }
         
@@ -76,4 +76,4 @@ pipeline {
             }
         }
     }
-}
+   }
