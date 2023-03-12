@@ -17,7 +17,20 @@ pipeline {
           def image_name = "nextjs"
           def docker_image = "${ecr_registry}/${image_name}:${params.DOCKER_IMAGE_TAG}"
 
-          sh "docker pull ${docker_image}"
+          dir('terraform') {
+            sh 'terraform init'
+            sh 'terraform apply -auto-approve -var "docker_image=' + docker_image + '"'
+          }
+
+          def public_ip = sh(
+            script: 'terraform output public_ip',
+            returnStdout: true
+          ).trim()
+
+          sshagent(['my-ssh-credentials']) {
+            sh "ssh ec2-user@${public_ip} -o StrictHostKeyChecking=no 'sudo docker login -u AWS -p \$(aws ecr get-login-password) ${ecr_registry}'"
+            sh "ssh ec2-user@${public_ip} -o StrictHostKeyChecking=no 'sudo docker pull ${docker_image}'"
+          }
 
           currentBuild.result = 'SUCCESS'
         }
