@@ -42,9 +42,3 @@ variable "docker_image" {
   description = "The full name of the Docker image to deploy."
   default = "602997897775.dkr.ecr.eu-central-1.amazonaws.com/nextjs:140"
 }
-
-variable "elastic_ip_allocation_id" {
-    description = "The Elastic IP for your EC2 instance"
-    type = string
-    default = "eipalloc-079741a994fef2264"
-}
