@@ -11,24 +11,13 @@ resource "aws_instance" "this" {
   ami           = var.ami
   instance_type = var.instance_type
   key_name      = var.key_name
-  security_groups = [aws_security_group.allow_ssh.name]
+  security_groups = var.security_group_ids
   subnet_id     = var.subnet_id
   associate_public_ip_address = true
   user_data     = base64encode(local.user_data)
   
   tags = {
     Name = "Deploy"
-  }
-}
-
-resource "aws_security_group" "allow_ssh" {
-  name_prefix = "allow_ssh"
-  
-  ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
   }
 }
 
