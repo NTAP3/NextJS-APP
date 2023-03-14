@@ -26,6 +26,6 @@ locals {
               #!/bin/bash
               sudo apt-get update
               sudo apt-get -y install docker.io
-              sudo docker run -p 80:80 ${var.docker_image}
+              sudo docker run -p 3000:3000 ${var.docker_image}
               EOF
 }
