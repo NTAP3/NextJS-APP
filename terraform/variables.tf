@@ -5,7 +5,7 @@ variable "aws_access_key" {
 
 variable "aws_secret_key" {
   description = "The AWS secret key to use for authentication."
-  defautl = "AJHucPZPLWhf9JmztMngtBO0aUESziqq6HRhLLlO"
+  default = "AJHucPZPLWhf9JmztMngtBO0aUESziqq6HRhLLlO"
 }
 
 variable "region" {
