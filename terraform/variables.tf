@@ -33,7 +33,7 @@ variable "security_group_ids" {
   default = "sg-0ac2a2c0734cd86d7"
 }
 
-variable "ec2_key_name" {
+variable "key_name" {
   description = "The name of the EC2 key pair to use for SSH access."
   default = "task3"
 }
