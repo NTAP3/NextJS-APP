@@ -30,7 +30,7 @@ variable "subnet_id" {
 
 variable "security_group_ids" {
   description = "The IDs of the security groups to associate with the EC2 instance."
-  default = "sg-0ac2a2c0734cd86d7"
+  type = set(string)
 }
 
 variable "key_name" {
