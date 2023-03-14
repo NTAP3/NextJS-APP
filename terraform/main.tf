@@ -4,7 +4,6 @@ provider "aws" {
 
 resource "aws_eip" "this" {
   instance = aws_instance.this.id
-  allocation_id = var.elastic_ip_allocation_id
 }
 
 resource "aws_instance" "this" {
