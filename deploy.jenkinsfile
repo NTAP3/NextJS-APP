@@ -19,7 +19,7 @@ pipeline {
 
           dir('terraform') {
             sh 'terraform init'
-            sh 'terraform apply -auto-approve -var "docker_image=' + docker_image + '" -var "security_group_ids=[\'sg-0ac2a2c0734cd86d7\']" -var "elastic_ip_allocation_id=eipalloc-079741a994fef2264"'
+            sh 'terraform apply -auto-approve -var "docker_image=' + docker_image + '" -var "security_group_ids=[\'sg-0ac2a2c0734cd86d7\']" -var "elastic_ip_allocation_id=eipassoc-0a26680799ee0a8a7"'
           }
 
           def public_ip = sh(
