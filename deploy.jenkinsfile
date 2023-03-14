@@ -2,7 +2,7 @@ pipeline {
   agent any
 
   parameters {
-    choice(
+    activeChoice(
       name: 'DOCKER_IMAGE_TAG',
       description: 'Choose a Docker image tag:',
       choices:[],
